@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Arrow from '../assets/icon-arrow.svg';
 
+import { Spinner } from '../components/Spinner';
+
 import { Container, SearchInfos, SearchSection, MapContainer } from '../styles/HomeStyles';
 
 export default function Home() {
@@ -15,7 +17,7 @@ export default function Home() {
       try {
         setLoading(true);
 
-        const response = await fetch(`https://geo.ipify.org/api/v2/country?apiKey=${apiKey}`)
+        const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}`)
           .then(response => response.json())
           .then(data => setResults(data));
 
@@ -44,7 +46,7 @@ export default function Home() {
 
       // Verificação (regex) se é realmente um IP.
       if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipAddress)) {
-        const response = await fetch(`https://geo.ipify.org/api/v2/country?apiKey=${apiKey}&ipAddress=${ipAddress}`)
+        const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&ipAddress=${ipAddress}`)
           .then(response => response.json())
           .then(data => setResults(data));
 
@@ -53,7 +55,7 @@ export default function Home() {
         };
       } else {
         // Verificação que se não é um ip então é um domínio.
-        const response = await fetch(`https://geo.ipify.org/api/v2/country?apiKey=${apiKey}&domain=${ipAddress}`)
+        const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}&domain=${ipAddress}`)
           .then(response => response.json())
           .then(data => setResults(data));
 
@@ -82,7 +84,12 @@ export default function Home() {
             onChange={(e) => setIpAddress(e.target.value)}
             value={ipAddress}
           />
-          <button onClick={handleSearchInApi}><Arrow /></button>
+          <button
+            disabled={!!loading}
+            onClick={handleSearchInApi}
+          >
+            {loading ? <Spinner /> : <Arrow />}
+          </button>
         </div>
 
         {results?.location && (
@@ -98,7 +105,7 @@ export default function Home() {
               <li>
                 <div>
                   <strong>Location</strong>
-                  <p>{`${results.location.region}, ${results.location.country}`}<br /></p>
+                  <p>{`${results.location.city}, ${results.location.country}`}<br /> {results.location.region}</p>
                 </div>
               </li>
 
