@@ -85,7 +85,6 @@ export default function Home() {
     });
   }, [])
 
-
   return (
     <Container>
       <Head>
