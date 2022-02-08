@@ -50,7 +50,7 @@ export default function Home() {
       }
 
     } catch (err) {
-      toast.error("An error ocurred while searching for this IP or domain! Please try again.");
+      // toast.error("An error ocurred while searching for this IP or domain! Please try again.");
     } finally {
       setLoading(false);
     }
