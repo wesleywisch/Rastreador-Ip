@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+
+import { toast } from 'react-toastify';
 
 import Arrow from '../assets/icon-arrow.svg';
 
@@ -16,29 +19,6 @@ export default function Home() {
   const defaultPosition = [-23.550520, -46.633308];
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-  useEffect(() => {
-    async function getInitialData() {
-      try {
-        setLoading(true);
-
-        const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}`)
-          .then(response => response.json())
-          .then(data => setResults(data));
-
-        if (response.status !== 200) {
-          throw new Error();
-        };
-
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getInitialData();
-  }, []);
 
   async function handleSearchInApi() {
     if (!ipAddress) {
@@ -70,15 +50,48 @@ export default function Home() {
       }
 
     } catch (err) {
-      console.log(err);
+      toast.error("An error ocurred while searching for this IP or domain! Please try again.");
     } finally {
       setLoading(false);
     }
   }
 
+  useEffect(() => {
+    async function getInitialData() {
+      try {
+        setLoading(true);
+
+        const response = await fetch(`https://geo.ipify.org/api/v2/country,city?apiKey=${apiKey}`)
+          .then(response => response.json())
+          .then(data => setResults(data));
+
+        if (response.status !== 200) {
+          throw new Error();
+        };
+
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getInitialData();
+  }, []);
+
+  useEffect(() => {
+    toast.warn("Please disable ADBlock for the application to work normally", {
+      autoClose: '10000',
+    });
+  }, [])
+
 
   return (
     <Container>
+      <Head>
+        <title>IP Address Tracker - Find any IP address or domain easily</title>
+      </Head>
+
       <SearchSection results={results.location}>
         <h2>IP address Tracker</h2>
 
