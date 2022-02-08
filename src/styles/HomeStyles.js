@@ -5,6 +5,10 @@ export const Container = styled.main`
   grid-template-rows: 2.5fr 4fr;
   width: 100vw;
   height: 100vh;
+
+  .leaflet-container{
+    z-index: 100;
+  }
 `;
 
 export const SearchSection = styled.header`
@@ -67,7 +71,29 @@ export const SearchSection = styled.header`
         background: var(--gray700);
       }
     }
+  }
 
+  @media screen and (max-width: 768px) {
+    h2{
+      font-size: 1.8rem;
+      margin: 2rem 0;
+    }
+
+    > div input {
+      padding: 1rem;
+      font-size: .9rem;
+      width: calc(80vw - 4rem);
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    > div input{
+      width: calc(90vw - 4rem);
+
+      &::placeholder{
+        font-size: .7rem;
+      }
+    }
   }
 `;
 
@@ -79,6 +105,11 @@ export const SearchInfos = styled.section`
   -webkit-box-shadow: 0px 7px 17px 0px rgba(0,0,0, 0.2);
   box-shadow: 0px 7px 17px 0px rgba(0,0,0, 0.2);
   padding: 1rem;
+
+  @media screen and (max-width: 768px) {
+    bottom: -165px;
+    padding: 0;
+  }
 
   @keyframes fadeUp {
     from {
@@ -115,6 +146,14 @@ export const SearchInfos = styled.section`
       color: var(--gray900);
     }
 
+    @media screen and (max-width: 1280px) {
+      width: 90vw;
+
+      p{
+        font-size: 1.5rem;
+      }
+    }
+
     li + li{
       margin-left: 3rem;
       position: relative;
@@ -134,10 +173,47 @@ export const SearchInfos = styled.section`
         transform: translate(-50%, -50%);
       }
     }
+
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 80vw;
+      padding: 2rem;
+
+      p{
+        font-size: 1.5rem;
+      }
+
+      li + li{
+        padding-top: 1.3rem;
+        margin: 0;
+
+        div{
+          padding: 0;
+        }
+
+        &:before{
+          display: none;
+        }
+      }
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 90vw;
+      padding: 1.5rem;
+    }
   }
 `;
 
 export const MapContainer = styled.section`
   width: 100%;
+  z-index: 1;
   background: #ccc;
+  pointer-events: ${({ loading }) => loading ? 'none' : 'auto'};
+
+  .leaflet-top {
+    top: initial;
+    bottom: 1rem;
+  }
 `;

@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+
 import Arrow from '../assets/icon-arrow.svg';
 
 import { Spinner } from '../components/Spinner';
+const Map = dynamic(() => import('../components/Map'), { ssr: false });
 
 import { Container, SearchInfos, SearchSection, MapContainer } from '../styles/HomeStyles';
 
@@ -9,6 +12,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [ipAddress, setIpAddress] = useState('');
   const [results, setResults] = useState({});
+
+  const defaultPosition = [-23.550520, -46.633308];
 
   const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
@@ -127,7 +132,15 @@ export default function Home() {
         )}
       </SearchSection>
 
-      <MapContainer />
+      <MapContainer loading={loading}>
+        <Map
+          defaultPosition={defaultPosition}
+          location={
+            results.location ?
+              [results.location.lat, results.location.lng] : defaultPosition
+          }
+        />
+      </MapContainer>
     </Container>
   )
 }
